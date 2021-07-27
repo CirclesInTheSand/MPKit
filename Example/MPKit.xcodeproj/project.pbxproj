@@ -260,6 +260,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -554,6 +555,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8938BE0047AD43C466C95FEF /* Pods-MPKit_Example.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPKit/MPKit-Prefix.pch";
@@ -569,6 +571,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EACE387277F164C7EE5742AE /* Pods-MPKit_Example.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPKit/MPKit-Prefix.pch";

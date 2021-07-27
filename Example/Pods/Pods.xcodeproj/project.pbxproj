@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		021E06FA26AFDFCA0076915F /* UINavigationBar+ST.m in Sources */ = {isa = PBXBuildFile; fileRef = 021E06F826AFDFCA0076915F /* UINavigationBar+ST.m */; };
-		021E06FB26AFDFCA0076915F /* UINavigationBar+ST.h in Headers */ = {isa = PBXBuildFile; fileRef = 021E06F926AFDFCA0076915F /* UINavigationBar+ST.h */; };
+		021E06FB26AFDFCA0076915F /* UINavigationBar+ST.h in Headers */ = {isa = PBXBuildFile; fileRef = 021E06F926AFDFCA0076915F /* UINavigationBar+ST.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		048A0BEFF1B60E66E3584C13FEE0DFCC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 02EF1AAA1ED809E38D11E5EE81CBB4D8 /* UIImage+ImageEffects.m */; };
 		05760BDFB9860CAEF3864BEE8853E266 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		0A9DFF2978B3618B8F4EBEFB1DDD0CBA /* Pods-MPKit_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F1DCF397216B4CC5556F9107A6204DF5 /* Pods-MPKit_Tests-dummy.m */; };
@@ -184,8 +184,8 @@
 		021E06F726AFDFCA0076915F /* UINavigationBar */ = {
 			isa = PBXGroup;
 			children = (
-				021E06F826AFDFCA0076915F /* UINavigationBar+ST.m */,
 				021E06F926AFDFCA0076915F /* UINavigationBar+ST.h */,
+				021E06F826AFDFCA0076915F /* UINavigationBar+ST.m */,
 			);
 			path = UINavigationBar;
 			sourceTree = "<group>";
@@ -495,6 +495,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				021E06FB26AFDFCA0076915F /* UINavigationBar+ST.h in Headers */,
 				7363F6DF77F76FC57D355DDB008C29FB /* CALayer+YYQExtension.h in Headers */,
 				1598544215F1830FA317F450E521550B /* MPKit-umbrella.h in Headers */,
 				97D07DE890302B3EBAE25EC1D33A707E /* MPKit.h in Headers */,
@@ -509,7 +510,6 @@
 				2A209D9E72D1D738DFC509DF4B4616B7 /* UIBarButtonItem+YYQExtension.h in Headers */,
 				68D322913462960EBB843DBF7284A37F /* UIButton+YYQExtension.h in Headers */,
 				7B2BA99873A6DDA948124F3090ECCB82 /* UIColor+YYQExtension.h in Headers */,
-				021E06FB26AFDFCA0076915F /* UINavigationBar+ST.h in Headers */,
 				3F31B56459605368F53369AB33366880 /* UIFont+YYQExtension.h in Headers */,
 				71AA5D324ADF50A5B121059922977566 /* UIImage+ImageEffects.h in Headers */,
 				D5875F13E0BB3FB281AD4931FF90476F /* UIImage+YYQExtension.h in Headers */,
