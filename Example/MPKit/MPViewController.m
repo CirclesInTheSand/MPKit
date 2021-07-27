@@ -32,7 +32,7 @@
         
     }];
     
-    YQAlertAction *actionEnsure = [YQAlertAction actionWithTitle:@"确定啊？" titleColor:UIColor.whiteColor handler:^(YQAlertAction *action) {
+    YQAlertAction *actionEnsure = [YQAlertAction actionWithTitle:@"确定啊？" titleColor:[UIColor colorWithHexColorString:@"ff2c76"] handler:^(YQAlertAction *action) {
         
     }];
     

@@ -13,7 +13,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [YQAlertView appearance].lastButtonActionColor = [UIColor colorWithHexColorString:@"dc4ad2"];
+    /// 注释AppDelegate 中的 last button color
+//    [YQAlertView appearance].lastButtonActionColor = [UIColor colorWithHexColorString:@"dc4ad2"];
     return YES;
 }
 
