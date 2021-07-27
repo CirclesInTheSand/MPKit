@@ -106,4 +106,19 @@
     return NSStringFromClass(self);
 }
 
+- (BOOL)isValidString{
+    
+    if (![self isKindOfClass:NSString.class]){
+        return false;
+    }
+    
+    NSString *selfString = (NSString *)self;
+    
+    if ([[selfString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0){
+        return false;
+    }
+    
+    return true;
+}
+
 @end

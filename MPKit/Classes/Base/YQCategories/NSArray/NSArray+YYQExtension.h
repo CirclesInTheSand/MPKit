@@ -27,7 +27,13 @@
  *  @param index 下标
  */
 - (id)objectOrNilAtIndex:(NSUInteger)index;
-
+/**
+ 按属性名称来进行分类,以stringValue的首字母拼音A-Z进行排序
+ 
+ @param propertyName 属性名称
+ @return 排序好的字典
+ */
+- (NSDictionary *)sortedByPropertyName:(NSString *)propertyName;
 @end
 
 @interface NSMutableArray (YYQExtension)
@@ -43,7 +49,4 @@
  *  删除第一条数据
  */
 - (void)removeFirstObject;
-
-
-
 @end

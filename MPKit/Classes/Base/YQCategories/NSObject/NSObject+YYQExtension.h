@@ -48,5 +48,10 @@
  */
 + (NSString *)yq_stringForClass;
 + (NSString *)mp_identifier;
+/**
+ 是否是有效的非空字符串
 
+ @return 返回是或者否
+ */
+- (BOOL)isValidString;
 @end

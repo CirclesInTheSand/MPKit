@@ -804,7 +804,7 @@
         [metrics setObject:@(frame.size.width) forKey:@"width"];
         [metrics setObject:@(frame.size.height) forKey:@"height"];
         
-        Hvfl = @"H:|[_customView(width)-right-]";
+        Hvfl = @"H:[_customView(width)]-right-|";
         Vvfl = @"V:|-top-[_customView(height@1000)]|";
     }
     NSDictionary *views = NSDictionaryOfVariableBindings(_customView);

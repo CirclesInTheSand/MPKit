@@ -6,6 +6,31 @@
 //
 
 #import "UIView+YYQExtension.h"
+#import "UIColor+YYQExtension.h"
+
+static NSString *kDefaultLayerName = @"kDefaultGradientLayer";
+
+@implementation UIWindow (CurrentViewController)
+
++ (UIViewController *)zf_currentViewController; {
+    UIWindow *window = [[UIApplication sharedApplication].delegate window];
+    UIViewController *topViewController = [window rootViewController];
+    while (true) {
+        if (topViewController.presentedViewController) {
+            topViewController = topViewController.presentedViewController;
+        } else if ([topViewController isKindOfClass:[UINavigationController class]] && [(UINavigationController*)topViewController topViewController]) {
+            topViewController = [(UINavigationController *)topViewController topViewController];
+        } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tab = (UITabBarController *)topViewController;
+            topViewController = tab.selectedViewController;
+        } else {
+            break;
+        }
+    }
+    return topViewController;
+}
+
+@end
 
 @implementation UIView (YYQExtension)
 
@@ -126,6 +151,148 @@
     }
     return resultView;
 
+}
+
+#pragma mark -- set corner radius
+- (void)hq_setCornerRadius:(CGFloat)radius withRectCorners:(UIRectCorner)rectCorner
+{
+    CGRect bounds = self.bounds;
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:bounds byRoundingCorners:rectCorner cornerRadii:CGSizeMake(radius,radius)];
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.frame = bounds;
+    maskLayer.path = maskPath.CGPath;
+    self.layer.mask = maskLayer;
+    
+}
+
+- (void)setMainThemeGradientColor{
+    [self setGradientLayerFromColor:[UIColor colorWithHexColorString:@"fe6c8b"] toColor:[UIColor colorWithHexColorString:@"ff2c8a"]];
+}
+
+- (void)setUpVerticalGradientLayerFromColor:(UIColor *)startColor toColor:(UIColor *)endColor{
+    NSMutableArray *subGradientLayers = NSMutableArray.array;
+    [self.layer.sublayers enumerateObjectsUsingBlock:^(CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj.name isEqualToString:kDefaultLayerName]){
+            [subGradientLayers addObject:obj];
+        }
+    }];
+    [subGradientLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.layer insertSublayer:[self setGradualChangingColorfromColor:startColor toColor:endColor fromPoint:CGPointMake(0, 1) toPoint:CGPointMake(0, 0)] atIndex:0];
+}
+
+- (void)setGradientLayerFromColor:(UIColor *)startColor toColor:(UIColor *)endColor{
+    
+    NSMutableArray *subGradientLayers = NSMutableArray.array;
+    [self.layer.sublayers enumerateObjectsUsingBlock:^(CALayer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj.name isEqualToString:kDefaultLayerName]){
+            [subGradientLayers addObject:obj];
+        }
+    }];
+    [subGradientLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.layer insertSublayer:[self setGradualChangingColorfromColor:startColor toColor:endColor fromPoint:CGPointMake(0, 1) toPoint:CGPointMake(1, 1)] atIndex:0];
+}
+
+- (CAGradientLayer *)setGradualChangingColorfromColor:(UIColor *)fromColor toColor:(UIColor *)toColor fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint{
+    
+    //    CAGradientLayer类对其绘制渐变背景颜色、填充层的形状(包括圆角)
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.frame = self.bounds;
+    gradientLayer.name = kDefaultLayerName;
+    //  创建渐变色数组，需要转换为CGColor颜色
+    gradientLayer.colors = @[(__bridge id)fromColor.CGColor,(__bridge id)toColor.CGColor];
+    
+    //  设置渐变颜色方向，左上点为(0,0), 右下点为(1,1)
+    gradientLayer.startPoint = fromPoint;
+    gradientLayer.endPoint = toPoint;
+    
+    //  设置颜色变化点，取值范围 0.0~1.0
+    gradientLayer.locations = @[@0,@1];
+    
+    return gradientLayer;
+}
+
+- (void)setBorderWithTop:(BOOL)top left:(BOOL)left bottom:(BOOL)bottom right:(BOOL)right borderColor:(UIColor *)color borderWidth:(CGFloat)width
+{
+    if (top) {
+        CALayer *layer = [CALayer layer];
+        layer.frame = CGRectMake(0, 0, self.width, width);
+        layer.backgroundColor = color.CGColor;
+        [self.layer addSublayer:layer];
+    }
+    if (left) {
+        CALayer *layer = [CALayer layer];
+        layer.frame = CGRectMake(0, 0, width, self.height);
+        layer.backgroundColor = color.CGColor;
+        [self.layer addSublayer:layer];
+    }
+    if (bottom) {
+        CALayer *layer = [CALayer layer];
+        layer.frame = CGRectMake(0, self.height - width, self.width, width);
+        layer.backgroundColor = color.CGColor;
+        [self.layer addSublayer:layer];
+    }
+    if (right) {
+        CALayer *layer = [CALayer layer];
+        layer.frame = CGRectMake(self.width - width, 0, width, self.height);
+        layer.backgroundColor = color.CGColor;
+        [self.layer addSublayer:layer];
+    }
+}
+
+
+- (void)setCornerRadiusWithReverseRadius:(CGFloat)radius viewSize:(CGSize)size corners:(MPCornerRadiusType)rectCorner {
+    CGFloat width = size.width;
+    CGFloat height = size.height;
+    
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    CGPoint startPoint = CGPointMake(0, 0);
+    [path moveToPoint:startPoint];
+    
+    if(rectCorner & MPCornerRadiusTopLeft) {
+        [path addArcWithCenter:CGPointMake(radius, radius) radius:radius startAngle:M_PI_2 * 2 endAngle:M_PI_2 * 3  clockwise:YES];
+    } else {
+        [path addArcWithCenter:CGPointMake(0, 0) radius:radius startAngle:M_PI_2 endAngle:0  clockwise:NO];
+    }
+    
+    if(rectCorner & MPCornerRadiusTopRight) {
+        [path addArcWithCenter:CGPointMake(width - radius, radius) radius:radius startAngle:-M_PI_2 endAngle:0 clockwise:YES];
+    } else {
+        [path addArcWithCenter:CGPointMake(width, 0) radius:radius startAngle:-M_PI_2*2 endAngle:(M_PI_2 ) clockwise:NO];
+    }
+    
+    
+    if(rectCorner & MPCornerRadiusBottomRight) {
+        [path addArcWithCenter:CGPointMake(width - radius, height-radius) radius:radius startAngle:0 endAngle:M_PI_2 clockwise:YES];
+    } else {
+        [path addArcWithCenter:CGPointMake(width, height) radius:radius startAngle:-M_PI_2 endAngle:-M_PI_2*2  clockwise:NO];
+    }
+    
+    if(rectCorner & MPCornerRadiusBottomLeft) {
+        [path addArcWithCenter:CGPointMake(0 + radius, height-radius) radius:radius startAngle:M_PI_2 endAngle:M_PI_2*2  clockwise:YES];
+    } else {
+        [path addArcWithCenter:CGPointMake(0, height) radius:radius startAngle:0 endAngle:-M_PI_2  clockwise:NO];
+    }
+    
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = self.bounds;
+    maskLayer.path = path.CGPath;
+    
+    self.layer.mask = maskLayer;
+    
+}
+
+- (UIView*)subViewOfClassName:(NSString*)className {
+    for (UIView* subView in self.subviews) {
+        if ([NSStringFromClass(subView.class) isEqualToString:className]) {
+            return subView;
+        }
+        
+        UIView* resultFound = [subView subViewOfClassName:className];
+        if (resultFound) {
+            return resultFound;
+        }
+    }
+    return nil;
 }
 
 -(CGFloat)x{
