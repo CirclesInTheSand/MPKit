@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		021E070326AFFC1B0076915F /* MPTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 021E070126AFFC1B0076915F /* MPTextField.m */; };
 		5F1948B90D0B4A13EBC43523 /* Pods_MPKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5592E274C26E64ED0A5D57A5 /* Pods_MPKit_Tests.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		021E070126AFFC1B0076915F /* MPTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTextField.m; sourceTree = "<group>"; };
+		021E070226AFFC1B0076915F /* MPTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTextField.h; sourceTree = "<group>"; };
 		2A0C4CEF423B316663883674 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		430E12B49FB0840AF4CCD1C9 /* Pods-MPKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MPKit_Tests/Pods-MPKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		5592E274C26E64ED0A5D57A5 /* Pods_MPKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MPKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +98,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		021E070026AFFC1B0076915F /* MPTextField */ = {
+			isa = PBXGroup;
+			children = (
+				021E070126AFFC1B0076915F /* MPTextField.m */,
+				021E070226AFFC1B0076915F /* MPTextField.h */,
+			);
+			path = MPTextField;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +144,7 @@
 		6003F593195388D20070C39A /* Example for MPKit */ = {
 			isa = PBXGroup;
 			children = (
+				021E070026AFFC1B0076915F /* MPTextField */,
 				6003F59C195388D20070C39A /* MPAppDelegate.h */,
 				6003F59D195388D20070C39A /* MPAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -406,6 +419,7 @@
 			files = (
 				6003F59E195388D20070C39A /* MPAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* MPViewController.m in Sources */,
+				021E070326AFFC1B0076915F /* MPTextField.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,6 +574,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPKit/MPKit-Prefix.pch";
 				INFOPLIST_FILE = "MPKit/MPKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -576,6 +591,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MPKit/MPKit-Prefix.pch";
 				INFOPLIST_FILE = "MPKit/MPKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
