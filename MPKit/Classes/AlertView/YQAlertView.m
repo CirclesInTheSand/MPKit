@@ -799,12 +799,12 @@
     NSString *Vvfl = @"|[_customView]|";
     NSMutableDictionary *metrics = [NSMutableDictionary dictionary];
     if (!CGRectEqualToRect(CGRectZero, frame)) {
-        [metrics setObject:@(frame.origin.x) forKey:@"left"];
+        [metrics setObject:@(frame.origin.x) forKey:@"right"];
         [metrics setObject:@(frame.origin.y) forKey:@"top"];
         [metrics setObject:@(frame.size.width) forKey:@"width"];
         [metrics setObject:@(frame.size.height) forKey:@"height"];
         
-        Hvfl = @"H:|-left-[_customView(width)]";
+        Hvfl = @"H:|[_customView(width)-right-]";
         Vvfl = @"V:|-top-[_customView(height@1000)]|";
     }
     NSDictionary *views = NSDictionaryOfVariableBindings(_customView);
