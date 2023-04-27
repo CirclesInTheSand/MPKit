@@ -178,6 +178,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:format];
     [formatter setLocale:[NSLocale currentLocale]];
+    formatter.calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     return [formatter stringFromDate:self];
 }
 
@@ -285,6 +286,8 @@
 
 +(NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [NSLocale systemLocale];
+    formatter.calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [formatter setDateFormat:format];
     return [formatter dateFromString:dateString];
 }
