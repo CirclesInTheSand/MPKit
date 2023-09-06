@@ -15,7 +15,9 @@
 #define kScreenHeightRatio (SCREEN_HEIGHT / 667.0)
 #define AdaptedWidth(x)  ceilf((x) * kScreenWidthRatio)
 #define AdaptedHeight(x) ceilf((x) * kScreenHeightRatio)
-#define kFontSize(R)     [UIFont systemFontOfSize:AdaptedWidth(R)]
+
+#define kFontSize(R) [UIFont fontWithName:@"PingFangSC-Regular" size:(R)]
+#define kMFontSize(R) [UIFont fontWithName:@"PingFangSC-Medium" size:(R)]
 
 @interface YQAlertView ()
 
@@ -75,8 +77,8 @@
     if (!message) {
         message = @"";
     }
-    NSAttributedString *attTitle = [[NSAttributedString alloc]initWithString:title attributes:@{NSForegroundColorAttributeName : UIColorFromHex(0x282828),NSFontAttributeName :kFontSize(17)}];
-    NSAttributedString *attMessage = [[NSAttributedString alloc]initWithString:message attributes:@{NSForegroundColorAttributeName : UIColorFromHex(0x282828),NSFontAttributeName :kFontSize(15)}];
+    NSAttributedString *attTitle = [[NSAttributedString alloc]initWithString:title attributes:@{NSForegroundColorAttributeName : UIColorFromHex(0xff2c76),NSFontAttributeName :kMFontSize(15)}];
+    NSAttributedString *attMessage = [[NSAttributedString alloc]initWithString:message attributes:@{NSForegroundColorAttributeName : UIColorFromHex(0x535353),NSFontAttributeName :kFontSize(14)}];
     
     return [self alertViewWithAttributedTitle:attTitle attributedMessage:attMessage];
 }
@@ -142,17 +144,19 @@
 }
 
 - (void)setAppearanceStyle{
-    UIColor *color = [YQAlertView appearance].lastButtonActionColor;
-    if (color) {
-        if (self.normalActions.count) {
-            YQAlertAction *lastAction = [self.normalActions lastObject];
-            lastAction.titleColor = color;
-        }
+    
+    if (self.normalActions.count) {
+        YQAlertAction *lastAction = [self.normalActions lastObject];
+        lastAction.titleColor = UIColor.whiteColor;
+        lastAction.backgroundColor = UIColorFromHex(0xed3070);
+        
     }
+    
     
 }
 
 - (void)hideWithCompletion:(dispatch_block_t)completion{
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.3 animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished) {
@@ -161,7 +165,7 @@
                 [subView performSelector:@selector(releaseBlock)];
             }
         }
-        [_alertView removeFromSuperview];
+        [weakSelf.alertView removeFromSuperview];
         [self removeFromSuperview];
         if (completion) {
             completion();
@@ -257,7 +261,6 @@
     [self alertView];
     [self alertTitleLabel];
     [self messageLabel];
-//    [self horizontalLine];
     
     [_alertView removeConstraints:_alertView.constraints];
     
@@ -314,7 +317,7 @@
                               views:NSDictionaryOfVariableBindings(_alertTitleLabel)]];
         
         [self addConstraints:[NSLayoutConstraint
-                              constraintsWithVisualFormat:@"V:|-titleLabelTop-[_alertTitleLabel]"
+                              constraintsWithVisualFormat:@"V:|-titleLabelTop-[_alertTitleLabel(titleLabelHeight)]"
                               options:0
                               metrics:[self metrics]
                               views:NSDictionaryOfVariableBindings(_alertTitleLabel)]];
@@ -325,8 +328,6 @@
         NSString *vVfl = @"V:[_alertTitleLabel]-messageLabelTop-[_messageLabel]";
         
         if (self.actions.count) {//有action，需要横向分割线
-//            [self horizontalLine];
-            
             //actions
             vVfl = [self joinActionsContraintVFLString:vVfl];
             
@@ -342,7 +343,6 @@
         NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:self.actionsDic];
         [views setObject:_messageLabel forKey:@"_messageLabel"];
         [views setObject:_alertTitleLabel forKey:@"_alertTitleLabel"];
-//        [views setObject:_horizontalLine forKey:@"_horizontalLine"];
 
         [self addConstraints:[NSLayoutConstraint
                               constraintsWithVisualFormat:@"H:|-titleLeftRightMargin-[_messageLabel]-titleLeftRightMargin-|"
@@ -417,10 +417,9 @@
     //拼接按钮的约束
     if (normalActions.count == 2) {
 
-//        [self verticalLine];
 
         NSMutableDictionary *views = [NSMutableDictionary dictionaryWithDictionary:[self actionsDic]];
-//        [views setObject:_verticalLine forKey:@"_verticalLine"];
+
         
         YQAlertAction *action0 = normalActions[0];
         YQAlertAction *action1 = normalActions[1];
@@ -431,8 +430,6 @@
         NSInteger firstIndexInAllActions = [self.actions indexOfObject:action0];
         NSInteger secondIndexInAllActions = [self.actions indexOfObject:action1];
         
-//        NSString *hVfl = [NSString stringWithFormat:@"H:|[action%lu][_verticalLine(horizontalLineHeight)][action%lu(==action%lu)]|",
-//                          firstIndexInAllActions,secondIndexInAllActions,firstIndexInAllActions];
         NSString *hVfl = [NSString stringWithFormat:@"H:|[action%lu][action%lu(==action%lu)]|",
                           firstIndexInAllActions,secondIndexInAllActions,firstIndexInAllActions];
 
@@ -502,17 +499,26 @@
 #pragma mark - getter
 - (CGFloat)titleLabelTop{
     if (self.alertTitleLabel.text.length || self.alertTitleLabel.attributedText.length) {
-        return AdaptedHeight(26);
+        return 27;
+    }
+    return 0;
+}
+
+- (CGFloat)titleLabelHeight {
+    if (self.alertTitleLabel.text.length || self.alertTitleLabel.attributedText.length) {
+        return 15;
     }
     return 0;
 }
 
 - (CGFloat)messageLabelTop{
     if (self.messageLabel.text.length || self.messageLabel.attributedText.length) {
+        // 有标题,或者是有内容
         if (!self.alertTitleLabel.text.length || !self.messageLabel.attributedText.length) {
-            return AdaptedHeight(26+15);
+            // 如果没有标题或者是，没有内容，则标题顶部高度提高到 26 + 15
+            return 27;
         }
-        return AdaptedHeight(15);
+        return 19;
     }
     return 0;
 }
@@ -521,7 +527,7 @@
     if (self.isCustom) {
         return 0;
     }
-    return AdaptedHeight(22);
+    return 20;
 }
 
 - (CGFloat)titleLeftRightMargin{
@@ -548,8 +554,7 @@
 }
 
 - (CGFloat)normalActionHeight{
-    
-    return AdaptedHeight(50);
+    return 45;
 }
 
 - (CGFloat)textFieldActionHeight{
@@ -564,6 +569,7 @@
     return @{
              @"titleLeftRightMargin"        :       @([self titleLeftRightMargin]),
              @"titleLabelTop"               :       @([self titleLabelTop]),
+             @"titleLabelHeight"            :       @([self titleLabelHeight]),
              @"messageLabelTop"             :       @([self messageLabelTop]),
              @"horizontalLineTop"           :       @([self horizontalLineTop]),
              @"alertViewLeftRightMargin"    :       @([self alertViewLeftRightMargin]),
@@ -580,7 +586,7 @@
     if (!_alertView) {
         _alertView = [[UIView alloc] init];
         _alertView.backgroundColor = UIColorFromHex(0xf7f7f7);
-        _alertView.layer.cornerRadius = 5;
+        _alertView.layer.cornerRadius = 20;
         _alertView.clipsToBounds = YES;
         _alertView.bounds = CGRectMake(0, 0, SCREEN_WIDTH - AdaptedWidth(60), AdaptedHeight(173));
         [self addSubview:_alertView];
@@ -595,7 +601,7 @@
     if (!_alertTitleLabel) {
         _alertTitleLabel = [[UILabel alloc]init];
         _alertTitleLabel.textColor = [self colorWithHexColorString:@"282828"];
-        _alertTitleLabel.font = kFontSize(17);
+        _alertTitleLabel.font = kMFontSize(16);
         _alertTitleLabel.textAlignment = NSTextAlignmentCenter;
         _alertTitleLabel.numberOfLines = 0;
         _alertTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -607,7 +613,6 @@
 
 - (UILabel *)messageLabel{
     if (!_messageLabel) {
-        _messageLabel = [[UILabel alloc]init];
         _messageLabel = [[UILabel alloc]init];
         _messageLabel.textColor = [self colorWithHexColorString:@"282828"];
         _messageLabel.font = kFontSize(15);
@@ -640,26 +645,6 @@
     }
     return _normalActions;
 }
-
-//- (UIView *)horizontalLine{
-//    if (!_horizontalLine) {
-//        _horizontalLine = [UIView new];
-//        _horizontalLine.backgroundColor = UIColorFromHex(0xe1e1e1);
-//        _horizontalLine.translatesAutoresizingMaskIntoConstraints = NO;
-//        [self.alertView addSubview:_horizontalLine];
-//    }
-//    return _horizontalLine;
-//}
-
-//- (UIView *)verticalLine{
-//    if (!_verticalLine) {
-//        _verticalLine = [UIView new];
-//        _verticalLine.backgroundColor = UIColorFromHex(0xe1e1e1);
-//        _verticalLine.translatesAutoresizingMaskIntoConstraints = NO;
-//        [self.alertView addSubview:_verticalLine];
-//    }
-//    return _horizontalLine;
-//}
 
 - (UIColor *)colorWithHexColorString:(NSString *)hexColorString{
     return [self colorWithHexColorString:hexColorString alpha:1.0f];
@@ -741,14 +726,10 @@
     if (!title) {
         title = @"";
     }
-    UIColor *color = UIColorFromHex(666666);
-//    YQAlertView *alertView = [YQAlertView appearance];
-//    if (alertView.lastButtonActionColor) {
-//        color = alertView.lastButtonActionColor;
-//    }
+    UIColor *color = UIColorFromHex(0x535353);
     
     NSDictionary *attributes = @{
-                                 NSFontAttributeName : kFontSize(17),
+                                 NSFontAttributeName : kFontSize(15),
                                  NSForegroundColorAttributeName : color,
                                  };
     NSAttributedString *attString = [[NSAttributedString alloc]initWithString:title attributes:attributes];
@@ -768,7 +749,7 @@
     if (!title) {
         title = @"";
     }
-    NSAttributedString *attTitle = [[NSAttributedString alloc]initWithString:title attributes:@{NSForegroundColorAttributeName : titleColor,NSFontAttributeName : kFontSize(17)}];
+    NSAttributedString *attTitle = [[NSAttributedString alloc]initWithString:title attributes:@{NSForegroundColorAttributeName : titleColor,NSFontAttributeName : kFontSize(15)}];
     return [self actionWithAttributedTitle:attTitle handler:handler];
 }
 
